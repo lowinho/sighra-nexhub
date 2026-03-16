@@ -1,0 +1,26 @@
+version: "3.9"
+
+services:
+  app:
+    build:
+      context: .
+      dockerfile: Dockerfile
+      target: builder
+    container_name: journey-service
+    restart: unless-stopped
+    env_file:
+      - .env.docker
+    ports:
+      - "7000:7000"
+    volumes:
+      - ./src:/app/src
+      - ./simulation:/app/simulation
+      - ./mocks:/app/mocks
+    command: npm run dev
+    networks:
+      - api_dev_network
+
+networks:
+  api_dev_network:
+    external: true
+    name: backend_api_dev_network
